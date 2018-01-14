@@ -1,0 +1,6 @@
+# python precompiled files:
+*.pyc
+*.pyo
+*.log
+*~
+powder/local_settings.py
