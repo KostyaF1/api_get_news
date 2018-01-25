@@ -61,7 +61,7 @@ def parse(search_list):
 	index = 0
 	count = 0
 	context = []
-	for page in range(1, 14):
+	for page in range(1, 20):
 		soup = BeautifulSoup(get_html(get_url(MAIN_URL) + '?p=%d' % page), 'lxml')
 		table = soup.find('table', class_ = 'itemlist')
 		tr_teg = table.find_all('tr', class_='athing')
@@ -69,7 +69,7 @@ def parse(search_list):
 		for raw in tr_teg:
 			raw.insert(count, td_teg[index])
 			index += 1
-			count +=1
+			count += 1
 			if index > len(td_teg) - 1:
 				index = 0
 				count = 0

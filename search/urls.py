@@ -4,5 +4,5 @@ from .views import get_search
 
 
 urlpatterns = [
-    re_path('^$', get_search, name='post_search'),
+    re_path(r'^$', get_search, name='search'),
     ]
