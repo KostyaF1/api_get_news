@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+ <html lang="en" >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <title>Posts</title>
+   
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-grid.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-reboot.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-grid.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-reboot.css' %}" rel="stylesheet">
+    <script src="{%static 'js/bootstrap.min.js'%}"></script>
+
+  </head>
+  <body > 
+  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="search" name="search" maxlength="100" required />
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<tr height = '10px'></tr>
+<nav width = '85%' >
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">News</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">JSON</a>
+  </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+    {% for post in context %}
+    <h5>{{ post.title }}</h5>
+    author: <p>{{ post.author }}</p>
+    id: <p>{{ post.item_id }}</p>
+    score: <p>{{ post.score }}</p>
+    age: <p>{{ post.pub_date }}</p>
+    url: <a href="{{ post.url }}">{{ post.url }}</a><br>
+    site: <a href="{{ post.site }}">{{ post.site }}</a>
+    {% endfor %}
+  </div>
+  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+    <center>
+     <table>
+       <tbody>
+         <tr>
+           <td><pre>{{ json1 }}</pre></td>
+         </tr>
+       </tbody>
+      </table>
+    </center>
+  </div>
+</div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+  </body>
+</html>
