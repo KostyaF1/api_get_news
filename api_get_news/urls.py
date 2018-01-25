@@ -21,6 +21,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path('^search/', include('search.urls')),
-    re_path(r'^api/', include('api.urls')),
+    re_path(r'^search/', include('search.urls')),
+    path('api/', include('api.urls')),
 ] +  static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

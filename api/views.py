@@ -45,7 +45,7 @@ def api_posts_list(request):
 	count = 0
 	context = []
 	#if request:
-	for page in range(1, 14):
+	for page in range(1, 20):
 		soup = BeautifulSoup(get_html(get_url(MAIN_URL) + '?p=%d' % page), 'lxml')
 		table = soup.find('table', class_ = 'itemlist')
 		tr_teg = table.find_all('tr', class_='athing')
@@ -53,7 +53,7 @@ def api_posts_list(request):
 		for raw in tr_teg:
 			raw.insert(count, td_teg[index])
 			index += 1
-			count +=1
+			count += 1
 			if index > len(td_teg) - 1:
 				index = 0
 				count = 0
@@ -79,41 +79,41 @@ def api_posts_site(request, site_name):
 	index = 0
 	count = 0
 	context = []
-	#if request:
-	for page in range(1, 14):
-		soup = BeautifulSoup(get_html(get_url(MAIN_URL) + '?p=%d' % page), 'lxml')
-		table = soup.find('table', class_ = 'itemlist')
-		tr_teg = table.find_all('tr', class_='athing')
-		td_teg = table.find_all('td', class_='subtext')
-		for raw in tr_teg:
-			raw.insert(count, td_teg[index])
-			index += 1
-			count += 1
-			if index > len(td_teg) - 1:
-				index = 0
-				count = 0
-		for raw in tr_teg:
-			site = ''.join([a.text for a in raw.find_all('span', class_='sitestr')])
-			if site_name in site:
-				title = ''.join([a.text for a in raw.find_all('a', class_='storylink')])
-				author = ''.join([a.text for a in raw.find_all('a', class_='hnuser')])
-				url = ''.join([a.get('href') for a in raw.find_all('a', class_='storylink')])
-				score = ''.join([a.text for a in raw.find_all('span', class_='score')])
-				item_id = ''.join([a.get('id') for a in raw.find_all('span', class_='score')]).replace('score_', '')
-				context.append({
-								'title' : title,
-								'author' : author,
-								'url' : url,
-								'score' : score,
-								'item_id' : item_id,
-								})
-	if context == []:
-		 return HttpResponse('Does not exist')
-	else:
-		d[site_name] = context
-		json1 = json.dumps(d, indent = 2)
+	if request:
+		for page in range(1, 20):
+			soup = BeautifulSoup(get_html(get_url(MAIN_URL) + '?p=%d' % page), 'lxml')
+			table = soup.find('table', class_ = 'itemlist')
+			tr_teg = table.find_all('tr', class_='athing')
+			td_teg = table.find_all('td', class_='subtext')
+			for raw in tr_teg:
+				raw.insert(count, td_teg[index])
+				index += 1
+				count += 1
+				if index > len(td_teg) - 1:
+					index = 0
+					count = 0
+			for raw in tr_teg:
+				site = ''.join([a.text for a in raw.find_all('span', class_='sitestr')])
+				if site_name in site:
+					title = ''.join([a.text for a in raw.find_all('a', class_='storylink')])
+					author = ''.join([a.text for a in raw.find_all('a', class_='hnuser')])
+					url = ''.join([a.get('href') for a in raw.find_all('a', class_='storylink')])
+					score = ''.join([a.text for a in raw.find_all('span', class_='score')])
+					item_id = ''.join([a.get('id') for a in raw.find_all('span', class_='score')]).replace('score_', '')
+					context.append({
+									'title' : title,
+									'author' : author,
+									'url' : url,
+									'score' : score,
+									'item_id' : item_id,
+									})
+		if context == []:
+		 	return HttpResponse('Does not exist')
+		else:
+			d[site_name] = context
+			json1 = json.dumps(d, indent = 2)
 
-	return HttpResponse(json1)
+		return HttpResponse(json1)
 
 def api(request):
 	temp = 'api.h'
