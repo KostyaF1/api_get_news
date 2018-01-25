@@ -10,7 +10,7 @@ import json
 from api.forms import PostForm
 
 
-MAIN_URL = 'https://ycombinator.com'
+MAIN_URL = 'ycombinator.com'
 
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -20,21 +20,11 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
        'Connection': 'keep-alive'}
 
 def get_html(url):
-	request = Request(url, headers=hdr)
+	request = Request('https://news.' + url, headers=hdr)
 	response = urlopen(request).read()
 	
 	return response
 
-def get_url(url):
-	resp = requests.get(url)
-	soup = BeautifulSoup(resp.content, 'lxml')	
-	table = soup.find('div', class_='also-row')
-	for link in table.find_all('a', class_='biglink')[1:-1]:
-		url = link.get('href')
-
-	return url
-
-	   
 
 def get_search(request):
 	context = []
@@ -62,7 +52,7 @@ def parse(search_list):
 	count = 0
 	context = []
 	for page in range(1, 20):
-		soup = BeautifulSoup(get_html(get_url(MAIN_URL) + '?p=%d' % page), 'lxml')
+		soup = BeautifulSoup(get_html(MAIN_URL + '?p=%d' % page), 'lxml')
 		table = soup.find('table', class_ = 'itemlist')
 		tr_teg = table.find_all('tr', class_='athing')
 		td_teg = table.find_all('td', class_='subtext')
