@@ -45,6 +45,41 @@ def get_search(request):
 													'json1': json1, 
 													'context':context, 
 													})
+def start_point(url):
+	index = 0
+	count = 0
+	context = []
+	request = Request('https://news.' + url + '/newest', headers=hdr)
+	response = urlopen(request).read()
+	soup = BeautifulSoup(response, 'lxml')
+	table = soup.find('table', class_ = 'itemlist')
+	tr_teg = table.find_all('tr', class_='athing')
+	td_teg = table.find_all('td', class_='subtext')
+	for raw in tr_teg:
+		raw.insert(count, td_teg[index])
+		index += 1
+		count += 1
+		if index > len(td_teg) - 1:
+			index = 0
+			count = 0
+	for raw in tr_teg:
+		context.append({
+						'title' : ''.join([a.text for a in raw.find_all('a', class_='storylink')]),
+						'author' : ''.join([a.text for a in raw.find_all('a', class_='hnuser')]),
+						'site' : ''.join([a.text for a in raw.find_all('span', class_='sitestr')]),
+						'url' : ''.join([a.get('href') for a in raw.find_all('a', class_='storylink')]),
+						'score' : ''.join([a.text for a in raw.find_all('span', class_='score')]),
+						'item_id' : ''.join([a.get('id') for a in raw.find_all('span', class_='score')]).replace('score_', ''),
+						'pub_date' : ''.join([a.text for a in raw.find_all('span', class_='age')])
+						})
+	if context == []:
+		return HttpResponse('Does not exist')
+	else:
+		json1 = json.dumps(context, indent = 2)		
+
+	return context
+
+
 
 
 def parse(search_list):
