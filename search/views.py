@@ -13,7 +13,7 @@ from search.forms import PostForm
 MAIN_URL = 'ycombinator.com/'
 
 # Диапазон страниц поиска
-PARSE_RANGE = 30       
+PARSE_RANGE = 25       
 
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -67,14 +67,13 @@ def get_search(request):
 				more_link = get_link(soup)
 				print(more_link)
 				context.extend(get_parse(soup, search_list))
-
-			context = list_filter(context)
-			json1 = json.dumps(context, indent = 2)	
+	
 			if context == []:
 				return render_to_response('search/search.html', { 'error' : 'Does Not Exist'})
 	else:
-		form = PostForm()		
-
+		form = PostForm()
+	context = list_filter(context)		
+	json1 = json.dumps(context, indent = 2)
 	return render_to_response('search/search.html', {
 													'form' : form, 
 													'json1' : json1, 
