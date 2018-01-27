@@ -47,6 +47,7 @@
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
   <center>
     <div style="width: 80%; background-color: #FFF8DC">
+    <p>{{error}}</p>
     {% for post in context %}
     <h5 style="margin-bottom: 10px; margin-top: 15px;" >{{ post.title }}</h5>
     <li><a style="color: black; margin: 5px" href="{{ post.url }}">url: {{ post.url }}</a></li>
