@@ -1,21 +1,29 @@
-from django.http import  HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render_to_response, render
+from django.http import (
+    HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound,
+    HttpResponseServerError,
+)
+from django.shortcuts import get_object_or_404, render, render_to_response
+from django.http import JsonResponse
 from django.core.serializers import serialize
-from django.utils import timezone
 
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
-import requests
-from lxml.html.soupparser import fromstring
 import re
 import json
+
 from .models import Post
 
+ERROR_404_TEMPLATE_NAME = '404.html'
+ERROR_403_TEMPLATE_NAME = '403.html'
+ERROR_400_TEMPLATE_NAME = '400.html'
+ERROR_500_TEMPLATE_NAME = '500.html'
 
 MAIN_URL = 'ycombinator.com/'
 
 # Диапазон страниц поиска
 PARSE_RANGE = 30
+
+domen_name = '([$a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}'
 
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -55,17 +63,20 @@ def get_query_dict(raw):
 
 def get_page_list(request):
 	context = []
-	soup = BeautifulSoup(get_html(MAIN_URL + '/newest'), 'lxml')
-	context = get_parse(soup)
-	more_link = get_link(soup)
-	for page in range(PARSE_RANGE):											
-		soup = BeautifulSoup(get_html(MAIN_URL + more_link), 'lxml')
+	try:
+		soup = BeautifulSoup(get_html(MAIN_URL + '/newest'), 'lxml')
+		context = get_parse(soup)
 		more_link = get_link(soup)
-		context.extend(get_parse(soup))
-	json1 = json.dumps(context, indent = 2)	
+		for page in range(PARSE_RANGE):											
+			soup = BeautifulSoup(get_html(MAIN_URL + more_link), 'lxml')
+			more_link = get_link(soup)
+			context.extend(get_parse(soup))
+		json1 = json.dumps(context, indent = 2)	
 
-	print(context, len(context))
-	return HttpResponse(json1)
+		return HttpResponse(json1)
+	except:
+		return JsonResponse({'status' : 403, 'error' : 'Forbidden'})
+
 		
 
 def get_parse(soup):
@@ -120,29 +131,34 @@ def get_parse_site(site_url):
 
 			
 def get_site_list(request, site_name):
-	context_dict = {}
-	soup = BeautifulSoup(get_html(MAIN_URL + '/newest'), 'lxml')
-	site_url = get_site_url(soup, site_name)
-	if site_url != None:
-		context_dict[site_name] = get_parse_site(site_url)
-		json1 = json.dumps(context_dict, indent = 2)
-		print(json1)
-		return HttpResponse(json1)
+	try:
+		if re.search(domen_name, site_name) == None:
+			return JsonResponse({'status' : 400, 'error' : 'BadRequest'})
+		context_dict = {}
+		soup = BeautifulSoup(get_html(MAIN_URL + '/newest'), 'lxml')
+		site_url = get_site_url(soup, site_name)
+		if site_url != None:
+			context_dict[site_name] = get_parse_site(site_url)
+			json1 = json.dumps(context_dict, indent = 2)
+			print(json1)
+			return HttpResponse(json1)
 		
-	if site_url == None: 
-		more_link = get_link(soup)
-		print(more_link)
-		for page in range(PARSE_RANGE):											
-			soup = BeautifulSoup(get_html(MAIN_URL + more_link), 'lxml')
+		if site_url == None: 
 			more_link = get_link(soup)
 			print(more_link)
-			site_url = get_site_url(soup, site_name)
-			if site_url != None:
-				context_dict[site_name] = get_parse_site(site_url)
-				json1 = json.dumps(context_dict, indent = 2)
-				return HttpResponse(json1)
-			if site_url == None and page == PARSE_RANGE - 1:
-				return HttpResponse('Does Not Exist')
+			for page in range(PARSE_RANGE):											
+				soup = BeautifulSoup(get_html(MAIN_URL + more_link), 'lxml')
+				more_link = get_link(soup)
+				print(more_link)
+				site_url = get_site_url(soup, site_name)
+				if site_url != None:
+					context_dict[site_name] = get_parse_site(site_url)
+					json1 = json.dumps(context_dict, indent = 2)
+					return HttpResponse(json1)
+				if site_url == None and page == PARSE_RANGE - 1:
+					return HttpResponse({'status' : 200, 'error' : 'Does Not Exist'})
+	except :
+		return JsonResponse({'status' : 403, 'error' : 'Forbidden'})
 
 
 
