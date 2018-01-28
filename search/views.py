@@ -1,8 +1,9 @@
 from django.core.serializers import serialize
 from django.shortcuts import get_object_or_404, render, render_to_response
+from django.http import JsonResponse
 from django.utils import timezone
+
 from urllib.request import Request, urlopen
-import requests
 from bs4 import BeautifulSoup
 import re
 import json
@@ -53,32 +54,35 @@ def get_query_dict(raw):
 
 
 def get_search(request):
-	context = []
-	if request.GET:
-		form = PostForm(request.GET)
-		if form.is_valid():
-			search = form.cleaned_data['search']
-			search_list = re.sub(r'^\W|$', ' ', search.lower()).split()
-			soup = BeautifulSoup(get_html(MAIN_URL + '/newest'), 'lxml')
-			context = get_parse(soup, search_list)
-			more_link = get_link(soup)
-			for page in range(PARSE_RANGE):											
-				soup = BeautifulSoup(get_html(MAIN_URL + more_link), 'lxml')
+	try:
+		context = []
+		if request.GET:
+			form = PostForm(request.GET)
+			if form.is_valid():
+				search = form.cleaned_data['search']
+				search_list = re.sub(r'^\W|$', ' ', search.lower()).split()
+				soup = BeautifulSoup(get_html(MAIN_URL + '/newest'), 'lxml')
+				context = get_parse(soup, search_list)
 				more_link = get_link(soup)
-				print(more_link)
-				context.extend(get_parse(soup, search_list))
+				for page in range(PARSE_RANGE):											
+					soup = BeautifulSoup(get_html(MAIN_URL + more_link), 'lxml')
+					more_link = get_link(soup)
+					print(more_link)
+					context.extend(get_parse(soup, search_list))
 	
-			if context == []:
-				return render_to_response('search/search.html', { 'error' : 'Does Not Exist'})
-	else:
-		form = PostForm()
-	context = list_filter(context)		
-	json1 = json.dumps(context, indent = 2)
-	return render_to_response('search/search.html', {
-													'form' : form, 
-													'json1' : json1, 
-													'context' : context, 
-													})
+				if context == []:
+					return render_to_response('search/search.html', { 'error' : 'Does Not Exist'})
+		else:
+			form = PostForm()
+		context = list_filter(context)		
+		json1 = json.dumps(context, indent = 2)
+		return render_to_response('search/search.html', {
+														'form' : form, 
+														'json1' : json1, 
+														'context' : context, 
+														})
+	except:
+		return JsonResponse({'status' : 403, 'error' : 'Forbidden'})
 
 def get_parse(soup, search_list):
 	index = 0
