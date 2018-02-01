@@ -1,0 +1,156 @@
+.cbp-af-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background: #24292e;
+	z-index: 10000;
+	height: 50px;
+	overflow: hidden;
+	-webkit-transition: height 0.3s;
+	-moz-transition: height 0.3s;
+	transition: height 0.3s;
+}
+
+.cbp-af-header .cbp-af-inner {
+	width: 90%;
+	max-width: 69em;
+	margin: 0 auto;
+	padding: 0 1.875em;
+}
+
+.cbp-af-header h1,
+.cbp-af-header .form-inline,
+.cbp-af-header nav {
+	display: inline-block;
+	position: relative;
+}
+
+ /* We just have one-lined elements, so we'll center the elements with the line-height set to the height of the header */
+.cbp-af-header h1,
+.cbp-af-header .form-inline,
+.cbp-af-header nav a {
+	line-height: 50px;
+}
+
+.cbp-af-header h1 {
+	text-transform: uppercase;
+	color: #f6f6f6;
+	letter-spacing: 4px;
+	font-size: 0.9em;
+	margin-right: 0.5%;
+	float: left;
+}
+
+.cbp-af-header .form-inline {
+	opacity: 0.1;
+	margin-left: 0.5%;
+	
+}
+
+.cbp-af-header .form-control.my  {
+    height: 27px;
+    border-radius: 2px;
+    margin-left: 0.5%
+    background:none;
+    opacity: 1;
+}
+
+.cbp-af-header nav {
+	float: right;
+}
+
+.cbp-af-header nav a {
+	color: #aaa;
+	font-weight: 600;
+	margin: 0 0 0 20px;
+	font-size: 0.9em;
+}
+
+.cbp-af-header nav a:hover {
+	color: #f6f6f6;
+	text-decoration: none
+}
+
+/* Transitions and class for reduced height */
+.cbp-af-header h1,
+.cbp-af-header .form-inline,
+.cbp-af-header nav a {
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
+.cbp-af-header.cbp-af-header-shrink {
+	height: 45px;
+}
+
+.cbp-af-header.cbp-af-header-shrink h1,
+.cbp-af-header.cbp-af-header-shrink .form-inline,
+.cbp-af-header.cbp-af-header-shrink nav a {
+	line-height: 45px;
+}
+
+.cbp-af-header.cbp-af-header-shrink h1 {
+	font-size: 0.8em;
+}
+
+
+
+/* Example Media Queries */
+@media screen and (max-width: 55em) {
+	
+	.cbp-af-header .cbp-af-inner {
+		width: 100%;
+	}
+
+	.cbp-af-header h1,
+	.cbp-af-header .form-inline,
+	.cbp-af-header nav {
+		display: block;
+		margin: 0 5px;
+		text-align: center;
+		float: none;
+	}
+
+	.cbp-af-header h1,
+	.cbp-af-header .form-inline,
+	.cbp-af-header nav a {
+		line-height: 30px;
+	}
+
+	.cbp-af-header h1 {
+		font-size: 15px;
+	}
+
+	.cbp-af-header nav a {
+		margin: 0 2px;
+	}
+
+	.cbp-af-header.cbp-af-header-shrink h1,
+	.cbp-af-header.cbp-af-header-shrink .form-inline,
+	.cbp-af-header.cbp-af-header-shrink nav a {
+		line-height: 20px;
+	}
+
+	.cbp-af-header.cbp-af-header-shrink h1 {
+		font-size: 10px;
+	}
+
+	.cbp-af-header.cbp-af-header-shrink nav a {
+		font-size: 10px;
+	}
+}
+
+@media screen and (max-width: 32.25em) {
+	.cbp-af-header nav a {
+		font-size: 10px;
+	}
+}
+
+@media screen and (max-width: 24em) {
+	.cbp-af-header nav a,
+	.cbp-af-header.cbp-af-header-shrink nav a {
+		line-height: 10px;
+	}
+}
