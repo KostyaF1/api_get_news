@@ -24,8 +24,7 @@ SECRET_KEY = 'r13saqjawona5z%-23^)@fo!hihd#e)l@r++1srk)*$xeairri'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
 # Application definition
@@ -84,11 +83,7 @@ DATABASES = {
 }
 
 
-STATIC_URL = '/static/'
 
-
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),
-                    'home/kostyantin/api_get_news/static' ]
 
 #TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates'), ]
 
@@ -128,6 +123,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),
+                    'home/api_get_news/static',]
+
+#STATIC_ROOT = "static/"
 
 
 MEDIA_URL = '/media/'

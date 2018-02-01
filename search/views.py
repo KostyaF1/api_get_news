@@ -7,28 +7,38 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import re
 import json
+import requests
+import urllib.request
+import time
+import random
 
 from search.forms import PostForm
 
 
-MAIN_URL = 'ycombinator.com/'
+MAIN_URL = 'http://news.ycombinator.com/'
 
 # Диапазон страниц поиска
-PARSE_RANGE = 25       
+PARSE_RANGE = 10      
 
-hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
        'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
        'Accept-Encoding': 'none',
        'Accept-Language': 'en-US,en;q=0.8',
        'Connection': 'keep-alive'}
 
+class AppURLopener(urllib.request.FancyURLopener):
+    version = "Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11"       
+
 
 def get_html(url):
-	request = Request('https://news.' + url, headers=hdr)
+	#opener = AppURLopener()
+	#time.sleep(random.randint(0, 5))
+	#response = opener.open(url).read()
+	#return response
+	request = Request(url, headers=hdr)
 	response = urlopen(request).read()
 	return response
-
 
 def get_link(soup):
 	itemlist = soup.find('table', class_ = 'itemlist')
@@ -54,35 +64,32 @@ def get_query_dict(raw):
 
 
 def get_search(request):
-	try:
-		context = []
-		if request.GET:
-			form = PostForm(request.GET)
-			if form.is_valid():
-				search = form.cleaned_data['search']
-				search_list = re.sub(r'^\W|$', ' ', search.lower()).split()
-				soup = BeautifulSoup(get_html(MAIN_URL + '/newest'), 'lxml')
-				context = get_parse(soup, search_list)
+	context = []
+	if request.GET:
+		form = PostForm(request.GET)
+		if form.is_valid():
+			search = form.cleaned_data['search']
+			search_list = re.sub(r'^\W|$', ' ', search.lower()).split()
+			soup = BeautifulSoup(get_html(MAIN_URL + '/newest'), 'lxml')
+			context = get_parse(soup, search_list)
+			more_link = get_link(soup)
+			for page in range(PARSE_RANGE):											
+				soup = BeautifulSoup(get_html(MAIN_URL + more_link), 'lxml')
 				more_link = get_link(soup)
-				for page in range(PARSE_RANGE):											
-					soup = BeautifulSoup(get_html(MAIN_URL + more_link), 'lxml')
-					more_link = get_link(soup)
-					print(more_link)
-					context.extend(get_parse(soup, search_list))
+				print(more_link)
+				context.extend(get_parse(soup, search_list))
 	
-				if context == []:
-					return render_to_response('search/search.html', { 'error' : 'Does Not Exist'})
-		else:
-			form = PostForm()
-		context = list_filter(context)		
-		json1 = json.dumps(context, indent = 2)
-		return render_to_response('search/search.html', {
-														'form' : form, 
-														'json1' : json1, 
-														'context' : context, 
-														})
-	except:
-		return JsonResponse({'status' : 403, 'error' : 'Forbidden'})
+			if context == []:
+				return render_to_response('search/search.html', { 'error' : 'Does Not Exist'})
+	else:
+		form = PostForm()
+	context = list_filter(context)		
+	json1 = json.dumps(context, indent = 2)
+	return render_to_response('search/search.html', {
+													'form' : form, 
+													'json1' : json1, 
+													'context' : context, 
+													})
 
 def get_parse(soup, search_list):
 	index = 0

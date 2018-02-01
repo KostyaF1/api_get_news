@@ -1,2 +1,8 @@
 #!/usr/bin/env python3
-from parse_news.models import Post
+from django.shortcuts import render
+
+
+
+
+def main_page(request):
+	return render(request, 'index.html')
