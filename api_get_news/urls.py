@@ -17,10 +17,14 @@ from django.contrib import admin
 from django.urls import  include, path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import main_page
 
 
 urlpatterns = [
+    path('main/', main_page, name = 'main'),
     path('admin/', admin.site.urls),
     re_path(r'^search/', include('search.urls')),
     path('api/', include('api.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
