@@ -41,7 +41,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
           </form>
           <nav>
             <a href="{% url 'main' %}">main</a>
-            <a href="#">news</a>
+            <a href="{% url 'news_list' %}">news</a>
             <a href="{% url 'search' %}">search</a>
             <a href="{% url 'api' %}">api</a>
           </nav>
