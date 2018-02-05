@@ -22,7 +22,7 @@ def get_page_list(request):
 						#'pub_date' : ''.join([a.text for a in raw.find_all('span', class_='age')])
 						})
 		
-	return JsonResponse(context)
+	return JsonResponse(context, safe = False)
 	
 			
 def get_site_list(request, site_name):

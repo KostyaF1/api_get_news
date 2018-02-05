@@ -24,6 +24,7 @@ SECRET_KEY = 'r13saqjawona5z%-23^)@fo!hihd#e)l@r++1srk)*$xeairri'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
 ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
@@ -54,7 +55,7 @@ MIDDLEWARE = [
 ]
 
 CRONJOBS = [
-    ('*/10 * * * *', 'api_get_news.cron.get_parse')
+    ('*/7 * * * *', 'api_get_news.cron.get_parse')
 ]
 
 ROOT_URLCONF = 'api_get_news.urls'

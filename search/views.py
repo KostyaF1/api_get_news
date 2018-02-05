@@ -32,61 +32,15 @@ def get_search(request):
 			search = form.cleaned_data['search']
 			search_list = re.sub(r'^\W|$', ' ', search.lower()).split()
 			for raw in New_Post.objects.all():
-				filter_list = []
-				fields_list.append(raw.title, raw.site)
-			
-			
-				return render_to_response('search/search.html', { 'error' : 'Does Not Exist'})
+				if search.lower() in raw.title.lower():
+					context.append(raw)
 	else:
-		form = PostForm()
-	context = list_filter(context)		
-	json1 = json.dumps(context, indent = 2)
+		form = PostForm()		
+	#json1 = json.dumps(context, indent = 2)
 	return render_to_response('search/search.html', {
-													'form' : form, 
-													'json1' : json1, 
 													'context' : context, 
 													})
 
-def get_parse(soup, search_list):
-	index = 0
-	count = 0
-	context = []
-	itemlist = soup.find('table', class_ = 'itemlist')
-	athing = itemlist.find_all('tr', class_ = 'athing')
-	subtext = itemlist.find_all('td', class_ = 'subtext')
-	tr_teg = itemlist.find_all('tr')
-	for raw in tr_teg:
-		link = raw.find('a', class_ = 'morelink')
-	more_link = link.get('href')
-	for raw in athing:
-		raw.insert(count, subtext[index])
-		index += 1
-		count += 1
-		if index > len(subtext) - 1:
-			index = 0
-			count = 0
-	for raw in athing:
-		title = ''.join([a.text for a in raw.find_all('a', class_ = 'storylink')])
-		author = ''.join([a.text for a in raw.find_all('a', class_ = 'hnuser')])
-		site = ''.join([a.text for a in raw.find_all('span', class_ = 'sitestr')])
-		fields_list = [title, site, author]
-		for search in search_list:
-			for field in fields_list:
-				if search in field.lower():
-					url = ''.join([a.get('href') for a in raw.find_all('a', class_ = 'storylink')])
-					score = ''.join([a.text for a in raw.find_all('span', class_ = 'score')])
-					item_id = ''.join([a.get('id') for a in raw.find_all('span', class_ = 'score')]).replace('score_', '')
-					pub_date = ''.join([a.text for a in raw.find_all('span', class_ = 'age')])
-					context.append({
-									'title' : title,
-									'author' : author,
-									'site' : site,
-									'url' : url,
-									'score': score,
-									'item_id': item_id,
-									'pub_date' : pub_date
-									})
-	return context
 
 def list_filter(context):
 	print(context)
