@@ -28,7 +28,6 @@ body {
     /*background-image: url('../images/trees.jpg');*/
 }
 
-
 .conteiner {
   position: relative;
   background-size: cover;
@@ -61,21 +60,7 @@ body {
   height: auto;
   width:100%;
   background-attachment: fixed;
-  background-color: #fff;
-  
-   
-}
-
-/* for index.html main page */
-
-.search-content {
-  background-color: #fff;
-  margin: 5%;
-  padding: 2.5%; 
-  height: auto;
-  width: 90%;
-  text-align: center;
-  position: relative;
+  background-color: #fff;   
 }
 
 .conteiner-search .search-content {
@@ -84,18 +69,36 @@ body {
   
 }
 
- .search-content .table-responsive {
+.search-content {
   background-color: none;
   margin: 5%;
-  max-width: 90%;
-  min-width: 90%;
+  padding: 2.5%; 
+  height: auto;
+  width: 80%;
+  text-align: center;
+  position: relative;
+}
+
+ .search-content .table-responsive {
+  background-color: none;
+  margin: 0;
+  max-width: 75%;
+  min-width: 75%;
+  float: left;
  }
 
 .title {
+   counter-reset: schetchik;
   height: auto;
-  font-size: 17px;
-  font-weight: 600;
-  
+  font-size: 14px;
+  font-weight: 550;
+  text-decoration: none;
+  text-align: left;
+  /*margin-top: 7px;*/
+}
+
+.title a {
+  color: #333;
 }
 
 .description {
@@ -103,7 +106,8 @@ body {
   height: auto;
   font-size: 12px;
   font-weight: 600;
-
+  border-bottom: 5px solid #fff;
+  color: #7b7b7b;
 }
 
 .spacer {

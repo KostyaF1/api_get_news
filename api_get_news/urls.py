@@ -21,8 +21,9 @@ from .views import main_page
 
 
 urlpatterns = [
-    path('main/', main_page, name = 'main'),
     path('admin/', admin.site.urls),
+    path('main/', main_page, name = 'main'),
+    path('news/', include('news.urls')),
     re_path(r'^search/', include('search.urls')),
     path('api/', include('api.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
