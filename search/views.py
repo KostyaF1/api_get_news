@@ -6,18 +6,16 @@ import re
 import json
 
 from search.forms import PostForm
-from news.models import New_Post
+from news.models import NewPost
 
 
 def get_query_dict(raw):
 	query_dict = {
 				'title' : ''.join([a.text for a in raw.find_all('a', class_='storylink')]),
 				'author' : ''.join([a.text for a in raw.find_all('a', class_='hnuser')]),
-				'site' : ''.join([a.text for a in raw.find_all('span', class_='sitestr')]),
+				'site_name' : ''.join([a.text for a in raw.find_all('span', class_='sitestr')]),
 				'url' : ''.join([a.get('href') for a in raw.find_all('a', class_='storylink')]),
-				'score' : ''.join([a.text for a in raw.find_all('span', class_='score')]),
 				'item_id' : ''.join([a.get('id') for a in raw.find_all('span', class_='score')]).replace('score_', ''),
-				'pub_date' : ''.join([a.text for a in raw.find_all('span', class_='age')])
 				}
 
 	return query_dict
@@ -31,9 +29,20 @@ def get_search(request):
 		if form.is_valid():
 			search = form.cleaned_data['search']
 			search_list = re.sub(r'^\W|$', ' ', search.lower()).split()
-			for raw in New_Post.objects.all():
+			for raw in NewPost.objects.all():
 				if search.lower() in raw.title.lower():
 					context.append(raw)
+				elif search.lower() in raw.author.lower():
+					context.append(raw)
+				elif search.lower() in raw.site_name.lower():
+					context.append(raw)
+				fields_list = [raw.title, raw.author, raw.site_name]
+				for field in fields_list:
+					for word in search_list:
+						if word in field:
+							context.append(raw)
+			context = dict(zip(context,context)).values()
+			list(context)					
 	else:
 		form = PostForm()		
 	#json1 = json.dumps(context, indent = 2)
