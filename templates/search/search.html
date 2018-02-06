@@ -7,8 +7,6 @@
 <div class = "container-search">
 
 <div class = "search-content">
-
-        <h4>Section title</h4>
         <center>
         <form>
   <div class="form-row">
@@ -30,28 +28,21 @@
 </form action="/search/" method="get">
 </center>
           <div class="table-responsive">
-            <table class="table table-striped table-sm">
-              <thead>
-                
-              </thead>
-              <tbody>
-              {% for post in context %}
-                <tr class = 'title'>
-                  <td >1.</td>
-                  <td class = 'title' colspan= "4" style = 'text-align: left;'>{{ post.title }}</td>
-                   <tr class = 'description'>
-                  <td>score: {{ post.score }}</td>
-                  <td>author: {{ post.author }}</td>
-                  <td>id: {{ post.item_id }}</td>
-                  <td>age: {{ post.pub_date }}</td>
-                  <td>site: {{ post.site }}</td>
-                </tr>
-                </tr>
-                <tr class = 'spacer'>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+            <table >
+        <tbody>
+          {% for post in context %}
+          <tr class = 'title'>
+            <td class = 'title' colspan = "4"><a style = 'text-decoration: none;' href="{{ post.url }}">{{ post.title }}</a></td>
+          <tr class = 'description'>
+            <td>author: {{ post.author }}</td>
+            <td>surce_id: {{ post.item_id }}</td>
+            <td>site: {{ post.site_name }}</td>
+            <td>id: {{ post.id }}</td>
+          </tr>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
           </div>
          
           </div>

@@ -60,7 +60,7 @@ body {
   height: auto;
   width:100%;
   background-attachment: fixed;
-  background-color: #fff;   
+  background-color: none;   
 }
 
 .conteiner-search .search-content {
@@ -70,25 +70,47 @@ body {
 }
 
 .search-content {
-  background-color: none;
-  margin: 5%;
-  padding: 2.5%; 
-  height: auto;
-  width: 80%;
   text-align: center;
+  background-color: #f3f3f3;
+  margin: 5% auto;
+  padding: 0; 
+  height: cover;
+  width: 85%;
   position: relative;
+  overflow: auto;
+  border-bottom: 2px solid #f54545; 
+}
+
+.header{
+  text-align: left;
+  background-color: #f54545;
+  padding: 2.5px;
+  font-weight: 550;
+  font-size: 15px;
 }
 
  .search-content .table-responsive {
+  margin-left: 10px;
   background-color: none;
-  margin: 0;
-  max-width: 75%;
-  min-width: 75%;
-  float: left;
+  max-width: 85%;
+  min-width: 85%;
+  /*float: left;*/
  }
 
+.search-content .more_link {
+  text-align: left;
+  margin: 5px 10px;
+}
+
+.more_link .more {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+
 .title {
-   counter-reset: schetchik;
   height: auto;
   font-size: 14px;
   font-weight: 550;
@@ -106,7 +128,7 @@ body {
   height: auto;
   font-size: 12px;
   font-weight: 600;
-  border-bottom: 5px solid #fff;
+  border-bottom: 5px solid #f3f3f3;
   color: #7b7b7b;
 }
 

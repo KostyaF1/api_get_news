@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block post_list_content %}
+<div class = "container-search">
+  <div class = "search-content">
+    <h5 class = 'header'>news wall</h5>    
+    <div class="table-responsive">
+      <table >
+        <tbody>
+          {% for post in object_list %}
+          <tr class = 'title'>
+            <td class = 'title' colspan = "4"><a style = 'text-decoration: none;' href="{{ post.url }}">{{ post.title }}</a></td>
+          <tr class = 'description'>
+            <td>author: {{ post.author }}</td>
+            <td>surce_id: {{ post.item_id }}</td>
+            <td>site: <a href = '{% url "news_detail" post.site_name %}'>{{ post.site_name }}</a></td>
+            <td>id: {{ post.id }}</td>
+          </tr>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class = 'more_link'>
+      {% if page_obj.has_next %}
+      <a class = 'more' href="?page={{ page_obj.next_page_number }}" aria-label="Next"><span aria-hidden="true">MORE</span></a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+             
+{% endblock %}
