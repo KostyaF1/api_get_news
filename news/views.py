@@ -21,6 +21,7 @@ class NewsList(ListView):
 
 def get_site_posts(request, site_name):
 	context = []
+	paginate_by = 30
 	for raw in NewPost.objects.filter(site_name = site_name):
 		context.append({
 						'title' : raw.title,
@@ -30,6 +31,7 @@ def get_site_posts(request, site_name):
 						'item_id' : raw.item_id,
 						'id' : raw.id
 						})
+	paginator = Paginator(context, 30)
 	return render_to_response('news/newpost_detail.html', {
 													'context' : context
 													})	

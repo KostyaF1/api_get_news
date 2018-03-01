@@ -34,19 +34,20 @@ def get_parse():
             index = 0
             count = 0       
     for raw in athing:
-        title = ''.join([a.text for a in raw.find_all('a', class_='storylink')])
-        author = ''.join([a.text for a in raw.find_all('a', class_='hnuser')])
         site_name = ''.join([a.text for a in raw.find_all('span', class_='sitestr')])
-        url = ''.join([a.get('href') for a in raw.find_all('a', class_='storylink')])
-        item_id = ''.join([a.get('id') for a in raw.find_all('span', class_='score')]).replace('score_', '')
+        if site_name == '':
+            pass
+        else:
+            title = ''.join([a.text for a in raw.find_all('a', class_='storylink')])
+            author = ''.join([a.text for a in raw.find_all('a', class_='hnuser')])
+            url = ''.join([a.get('href') for a in raw.find_all('a', class_='storylink')])
+            item_id = ''.join([a.get('id') for a in raw.find_all('span', class_='score')]).replace('score_', '')
 
-        NewPost.objects.get_or_create(
-                                        title = title,
-                                        author = author,
-                                        site_name = site_name,
-                                        url = url,
-                                        item_id = item_id,
-                                        )
-    
-    print('ok')
+            NewPost.objects.get_or_create(
+                                            title = title,
+                                            author = author,
+                                            site_name = site_name,
+                                            url = url,
+                                            item_id = item_id,
+                                            )
             
